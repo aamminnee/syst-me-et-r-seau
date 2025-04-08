@@ -1,0 +1,68 @@
+COMPTE RENDU TP 8:
+
+1) 
+[aissyne@vm-aissyne ~]$ seq 5 && seq 7
+1
+2
+3
+4
+5
+1
+2
+3
+4
+5
+6
+7
+
+a)
+[aissyne@vm-aissyne ~]$ for i in 1 2 3 4 5; do echo $i; done
+1
+2
+3
+4
+5
+
+[aissyne@vm-aissyne ~]$ for i in 1 2 3 4 5 6 7; do echo $i; done
+1
+2
+3
+4
+5
+6
+7
+
+b) 
+[aissyne@vm-aissyne TP_8]$ ls
+aissyne_fichier_reponse__tp_8.txt  my_seq.sh
+[aissyne@vm-aissyne TP_8]$ ls -l my_seq.sh 
+-rw-r--r-- 1 aissyne info-etu-but-2024 144 Mar  8 15:08 my_seq.sh
+[aissyne@vm-aissyne TP_8]$ chmod u+x my_seq.sh 
+[aissyne@vm-aissyne TP_8]$ ls -l my_seq.sh 
+-rwxr--r-- 1 aissyne info-etu-but-2024 144 Mar  8 15:08 my_seq.sh
+[aissyne@vm-aissyne TP_8]$ ./my_seq.sh 3
+1
+2
+3
+[aissyne@vm-aissyne TP_8]$ ./my_seq.sh 3 2
+Syntaxe: ./my_seq.sh INT
+
+[aissyne@vm-aissyne TP_8]$ ./my_seq.sh
+Syntaxe: ./my_seq.sh INT
+
+c)
+[aissyne@vm-aissyne TP_8]$ ./mult_math.sh 7 11
+49   56   63   70   77   
+56   64   72   80   88   
+63   72   81   90   99   
+70   80   90   100   110   
+77   88   99   110   121   
+[aissyne@vm-aissyne TP_8]$ 
+[aissyne@vm-aissyne TP_8]$ ./mult_math.sh 7 
+Missing argument required: ./mult_math.sh <ARG1> <ARG2>
+
+[aissyne@vm-aissyne TP_8]$ ./mult_math.sh 7 11 2
+Missing argument required: ./mult_math.sh <ARG1> <ARG2>
+
+2)
+

@@ -1,0 +1,248 @@
+TRACE ERITE TP02:
+
+forme simple:
+
+1. en entrant 'man echo' on s'apeçoit que man echo STRING renvoie string vers la sortie standard (terminal)
+ 
+2. la commande [aissyne@salle222-12 TP02]$ echo "hello world!"
+affiche hello world! car echo affiche la variables 'hello world!'
+
+3. la reponse est 0 cela veut dire qu'il n'y a aucun problème, la comande a parfaitement été éxécuter
+
+4. la commande s'est éxécuter correctement car il m'affiche fi
+
+5. on a une confirmation que ls fi a bien été éxécuter correctement car en récupérant le code d'exit de ls est 0
+
+6. la commande m'affiche le fichier fi en détails on y retrouve les permissions car ls -l est ls -long
+
+7. le code d'exit de la commande est 0 donc la comande ls -l fi a bien été éxécuter sans erreur 
+
+8. cela me renoie un message d'erreur "no such file or directory" ce qui est normal car il ne trouve pas le fichier nofi
+
+9. le code d'exit de la derniere commande éxécuté est 2 ce qui prouve que ls nofi ne s'est pas correctement éxécuter
+
+
+pipeline:
+
+1. [aissyne@salle222-12 TP02]$ echo "Hello world1!" | echo "Hello world2!"
+Hello world2!
+il execute les deux instructions de manière concurentiels (en parralèles)
+
+2. [aissyne@salle222-12 TP02]$ echo "Hello world2!" | echo "Hello world1!"
+Hello world1!
+même conclusion quela réponse précédentes
+
+
+liste:
+
+1. en rajoutant "; echo""$?", a la suite de chaque instruction, c'est tout simplement pour savoir si cela execute la commande echo a la suite des autres commandes en une seule ligne de commande. 
+";" sert à separer les instruction, l"avantage est d'écrire plusieur lignes de commande en une seule
+
+2. aissyne@salle222-12 TP02]$ ls fi ; echo "$?"
+fi
+0
+la commande a bien executer les deux instructions a la fois
+
+3. aissyne@salle222-12 TP02]$ ls nofi ; echo "$?"
+ls: cannot access 'nofi': No such file or directory
+2
+la commande a executer les deux commande a la suite malgré que la première ai recu une erreur
+
+4. 
+[aissyne@salle222-02 TP02]$ ls fi && echo "Hello world!" ; echo "$?"
+fi
+Hello world!
+0
+
+5.
+[aissyne@salle222-02 TP02]$ ls nofi && echo "Hello world!"; echo"$?"
+ls: cannot access 'nofi': No such file or directory
+2
+&& sert a exécuter e code à gauche && et si le code de sortie de l'instruction a gauche de && est differents de 0 alors
+ il n'exécute pas le reste de l'instruction le echo est exécuter car il appartien à une nouvelle instruction
+
+6.
+[aissyne@salle222-02 TP02]$ ls fi || echo "Hello world!" ; echo "$?"
+fi
+0
+il a exécuter q'une partie de la premiere instruction et il y a pas d'erreur
+
+7.
+ls: cannot access 'nofi': No such file or directory
+Hello world!
+0
+|| sert a éxecuter la premiere partie de la commande et si le code d'execution est 0 alors il passe a
+l'instruction suivante. mais si le code de sortie est different de 0 alors il execute l'autre partie de l'instruction soit une partie soit l'autre mais pas les 2
+
+8.
+[aissyne@salle222-02 TP02]$ ls nofi || ls fi ; echo "$?"
+ls: cannot access 'nofi': No such file or directory
+fi
+0
+il a executer les deux partie de l'instruction
+
+9.
+[aissyne@salle222-02 TP02]$ ls fi || ls nofi ; echo "$?"
+fi
+0
+il a executer une seule partie de l'instruction
+
+10.
+[aissyne@salle222-02 TP02]$ ls nofi && ls fi ; echo "$?"
+ls: cannot access 'nofi': No such file or directory
+2
+il a executer une seule partie de l'instruction, on remarque que "echo"$?"" nous affiche le code de sortie de la derniere 
+instruction éxécuter, elle contient une erreur donc on voit que mon affirmation est vrai
+
+2) redirection des entrée et des sortie
+
+1.[aissyne@salle222-02 TP02]$ ls nofi fi
+ls: cannot access 'nofi': No such file or directory
+fi
+
+2.
+[aissyne@salle222-02 TP02]$ ls nofi fi > output_file
+ls: cannot access 'nofi': No such file or directory
+
+3.
+[aissyne@salle222-02 TP02]$ cat output_file
+fi
+je déduis que > a créer un ficheier (si il en n'existe pas)ou il ecris le résultats des commandes qui on un code de sortie egal à 0
+
+[aissyne@salle222-02 TP02]$ ls nofi fi >> output_file
+ls: cannot access 'nofi': No such file or directory
+[aissyne@salle222-02 TP02]$ cat output_file
+fi
+fi
+je déduis que >> sert éxactement à la même chose que > (soit la redirection des sortie standart vers un fichier) à l'exeption que le contenu du fichier de la sortie standart des resultat 
+n'est pas supprimé et qu'il rajoute la nouvelle sortie (> réinitialise le fichier à chaque fois)
+
+[aissyne@salle222-02 TP02]$ ls nofi fi 2> output_file
+fi
+[aissyne@salle222-02 TP02]$ cat output_file
+ls: cannot access 'nofi': No such file or directory
+je déduis que 2> fais la même chose que ">" à l'exeption qu'il execute les instructions valide et si il ya des erreurs
+ il ecrit dans un fichier l'erreur (soit la redirection de la sortie des erreurs vers un fichier)
+
+[aissyne@salle222-02 TP02]$ ls nofi fi 2>> output_file
+fi
+[aissyne@salle222-02 TP02]$ cat output_file
+ls: cannot access 'nofi': No such file or directory
+ls: cannot access 'nofi': No such file or directory
+je déduis que 2>> sert à la même chose que 2> à l'exeption qui ne reinitialse pas le fichier en question
+
+[aissyne@salle222-02 TP02]$ ls nofi fi 2>&1 output_file
+ls: cannot access 'nofi': No such file or directory
+fi  output_file
+[aissyne@salle222-02 TP02]$ cat output_file
+ls: cannot access 'nofi': No such file or directory
+ls: cannot access 'nofi': No such file or directory
+je déduis que 2>&1 sert
+
+
+cd 4.
+[aissyne@salle222-15 ~]$ ls nofi > output_file
+ls: cannot access 'nofi': No such file or directory
+[aissyne@salle222-15 TP02]$ cat output_file
+[aissyne@salle222-15 TP02]$ 
+il y une erreur donc rien dans la sortie standard mais > copie seulement la sortie standard dans le fichier
+
+5.
+[aissyne@salle222-15 TP02]$ cat output_file
+[aissyne@salle222-15 TP02]$
+il supprime le contenu lié a ce fichier (si il existe sinon il le créer) puis ecris les messages attendus c'est a dire la sortie standard
+
+6.7.
+[aissyne@salle222-15 TP02]$ ls fifi nofifi > output_file
+ls: cannot access 'nofifi': No such file or directory
+[aissyne@salle222-15 TP02]$ cat output_file
+[aissyne@salle222-15 TP02]$
+l'explication est pareil à la question précédante
+
+8.9.
+[aissyne@salle222-15 TP02]$ ls nofi >> output_file 
+ls: cannot access 'nofi': No such file or directory
+[aissyne@salle222-15 TP02]$ cat output_file 
+[aissyne@salle222-15 TP02]$ 
+cela donne le même résultat mais la logique est différente car >> va va garder les ancienne données du fichier (si il existe)
+
+
+10.11.
+[aissyne@salle222-15 TP02]$ ls nofi fi 2> error_file
+fi
+[aissyne@salle222-15 TP02]$ cat error_file
+ls: cannot access 'nofi': No such file or directory
+2> à bien créer un fichier error_file et à rediriger la sortie des erreurs vers le fichier error_file 
+
+12.13
+[aissyne@salle222-15 ~]$ ls fi nofifi 2> error_file
+fi
+[aissyne@salle222-15 ~]$ cat error_file
+ls: cannot access 'nofifi': No such file or directory
+c'est la même logique que la question précédenta mais on peut aussi contater que 2> ecrase les nouvelles données du fichier sur les anciennes
+
+14.15
+[aissyne@salle222-15 TP02]$ ls nofi fi 2>> error_file
+fi
+[aissyne@salle222-15 TP02]$ cat error_file
+ls: cannot access 'nofifi': No such file or directory
+ls: cannot access 'nofi': No such file or directory
+on remarque que 2>> sert à la même chose que 2> mais lui garde les aciennes donées du fichier si il existe
+contrairement à 2>
+
+16.17.18
+[aissyne@salle222-15 TP02]$ ls nofi fi > output_file 2> error_file
+[aissyne@salle222-15 TP02]$ cat output_file
+fi
+[aissyne@salle222-15 TP02]$ cat error_file 
+ls: cannot access 'nofi': No such file or directory
+il a ecrit sortie standard dans le fichier output_file a la place des ancienne données
+il a ecrit aussi la sortie des erreurs dans error_file al al place des ancienne données
+cela nous permet de savoir que l'on peut faire cela en une ligne
+
+19.20
+[aissyne@salle222-15 TP02]$ ls nofi fi > output_and_error_file 2>&1
+[aissyne@salle222-15 TP02]$ cat output_and_error_file
+ls: cannot access 'nofi': No such file or directory
+fi
+
+ il a redirigé  la sortie standard et la sortie d'erreur vers le même fichier qu'il a créer car il n'exister pas et qui se
+nomme output_and_error_file
+ce qui le differencie de la commande précédante est que cette commande redirige tout dansun fichier alors que l'autre commande
+il faudrait ecrire deux fois le fichier en question pour que la commande précedante puisse ecrire tout l'integralité des sortie en un même fichier
+
+ 
+21. wc affiche le nombre de ligne, le nombre de mots et le nombre de caractères lorsque qu'on ecrit quoi que ce soit
+
+22.
+[aissyne@salle222-15 TP02]$ cat output_and_error_file
+ls: cannot access 'nofi': No such file or directory
+fi
+[aissyne@salle222-15 TP02]$ wc 
+zodjefiejfijf
+deefeof
+ff
+      3       3      25
+
+23.
+[aissyne@salle222-15 TP02]$ wc output_and_error_file 
+ 2 10 55 output_and_error_file
+il affiche le nombre: de lignes, de mots et de caratère du fichier en question puis donne la source des ces statistic c'est à dire le nom du fichier
+
+24.
+[aissyne@salle222-15 TP02]$ wc < output_and_error_file 
+ 2 10 55
+il affiche le nombre: de lignes, de mots, de caractère
+
+25.
+[aissyne@salle222-15 TP02]$ ls -l /etc/ > output_file
+il redirige le résultat de la requête vers le fichier output_file car il y a pas d'erreur
+
+26.
+[aissyne@salle222-15 TP02]$ wc < output_file
+  184  1657 10697
+il a donné les statictic du fichier output_file comme si on avait ecrit la requête
+
+27.
+.... 
+ 

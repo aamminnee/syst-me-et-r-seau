@@ -1,0 +1,223 @@
+Compte redu:
+
+
+[aissyne@salle222-15 TP_9]$ gzip -d ./arch_for_find.tar.gz
+[aissyne@salle222-15 TP_9]$ ls
+arch_for_find.tar  fichier_reponse_tp_09.txt
+[aissyne@salle222-15 TP_9]$ tar -xf arch_for_find.tar 
+[aissyne@salle222-15 TP_9]$ ls
+arch_for_find.tar  fichier_reponse_tp_09.txt  TREE
+[aissyne@salle222-15 TP_9]$ ls TREE
+lib
+[aissyne@salle222-15 TP_9]$ cd TREE
+[aissyne@salle222-15 TREE]$ mkdir ./lib/kernel/config/AA && mkdir ./lib/kernel/config/AA/BB && mkdir ./lib/kernel/config/AA/BB/CC mkdir ./lib/kernel/config/AA/BB/DD && mkdir ./lib/kernel/config/AA/BB/CC/XX && mkdir ./lib/kernel/config/AA/BB/DD/YY
+on a telecharger le fichier on l'aa deziper pui on a crée les dossiers dans le dossier TREE
+
+.
+└── lib
+    ├── auth
+    │   └── transm.d
+    ├── kernel
+    │   ├── config
+    │   │   └── AA
+    │   │       └── BB
+    │   │           ├── CC
+    │   │           │   └── XX
+    │   │           └── DD
+    │   │               └── YY
+
+
+Partie 1:
+
+1)
+[aissyne@salle222-15 TREE] find . -name "*.install" -type d
+./lib/krb5/plugins/custom.install
+
+2)
+[aissyne@salle222-15 TREE] find . -name "*.d" -type f
+./lib/auth/transm.d
+
+3)
+[aissyne@salle222-15 TREE] find . -empty -type d
+./lib/kernel/config/AA/BB/CC/XX
+./lib/kernel/config/AA/BB/DD/YY
+./lib/krb5/plugins/custom.install
+
+4)
+[aissyne@salle222-15 TREE] find . -size -1000c  -type f 
+./lib/kernel/install.d/50-depmod.install
+./lib/kernel/install.d/50-mkinitcpio.install
+./lib/krb5/synch/atom.install
+./lib/krb5/synch/settings.sh
+./lib/auth/transm.d
+
+5)
+[aissyne@salle222-15 TREE] find . -size +30000c  -type f 
+./lib/krb5/plugins/kdb/db2.so
+./lib/krb5/plugins/preauth/pkinit.so
+
+6)
+[aissyne@salle222-15 TREE] find . -size 1024c  -type f  
+./lib/krb5/plugins/play.in
+
+7)
+[aissyne@salle222-15 TREE] find . -size 2b  -type f 
+./lib/krb5/plugins/play.in
+./lib/krb5/synch/settings.sh
+
+8)
+[aissyne@salle222-15 TREE] find . -size +30b  -type f   
+./lib/krb5/plugins/kdb/db2.so
+./lib/krb5/plugins/preauth/otp.so
+./lib/krb5/plugins/preauth/pkinit.so
+
+9)
+[aissyne@salle222-15 TREE] find . -size -3b  -type f 
+./lib/kernel/install.d/50-depmod.install
+./lib/kernel/install.d/50-mkinitcpio.install
+./lib/krb5/plugins/play.in
+./lib/krb5/synch/atom.install
+./lib/krb5/synch/settings.sh
+./lib/auth/transm.d
+
+10)
+[aissyne@salle222-15 TREE] find . -size +1b -type f -a -size -4b  
+./lib/krb5/plugins/inout.dev
+./lib/krb5/plugins/play.in
+./lib/krb5/synch/settings.sh
+
+11)
+[aissyne@salle222-15 TREE] find . -type f -newer lib/krb5/synch/atom.install
+./lib/krb5/plugins/inout.dev
+./lib/krb5/plugins/play.in
+./lib/krb5/synch/settings.sh
+
+12)
+[aissyne@salle222-15 TREE] find /lib/krb5/synch/ -mtime -4  
+pas de résultat
+
+13)
+[aissyne@salle222-15 TREE] find  /lib/kernel/install.d -mtime +3   
+/lib/kernel/install.d
+/lib/kernel/install.d/50-depmod.install
+/lib/kernel/install.d/50-mkinitcpio.install
+/lib/kernel/install.d/90-loaderentry.install
+/lib/kernel/install.d/90-uki-copy.install
+
+14)
+[aissyne@salle222-15 TREE] find  . -mtime 3 -atime 2
+pas de résultat
+
+15)
+[aissyne@salle222-15 TREE] find . -type d -perm /0022
+pas de résultat
+
+16)
+[aissyne@salle222-15 TREE] find . -type d -perm -444
+.
+./lib
+./lib/kernel/install.d
+./lib/kernel/config
+./lib/kernel/config/AA
+./lib/kernel/config/AA/BB
+./lib/kernel/config/AA/BB/CC
+./lib/kernel/config/AA/BB/CC/XX
+./lib/kernel/config/AA/BB/DD
+./lib/kernel/config/AA/BB/DD/YY
+./lib/krb5
+./lib/krb5/plugins/kdb
+./lib/krb5/plugins/custom.install
+./lib/krb5/plugins/preauth
+./lib/krb5/synch
+./lib/auth
+
+17)
+[aissyne@salle222-15 TREE] find . -type f -perm 644
+./lib/krb5/plugins/kdb/db2.so
+./lib/krb5/plugins/kdb/kldap.so
+./lib/krb5/plugins/inout.dev
+./lib/krb5/plugins/play.in
+./lib/krb5/plugins/preauth/otp.so
+./lib/krb5/plugins/preauth/pkinit.so
+./lib/krb5/synch/atom.install
+./lib/krb5/synch/settings.sh
+./lib/auth/transm.d
+
+Partie 2:
+
+1) 
+[aissyne@salle222-15 TREE] find . -maxdepth 4 -name "[[:digit:]]" -type f -exec cp '{}' lib/kernel/config/AA/BB/CC/ ';'
+[aissyne@salle222-15 TREE] find . -maxdepth 4 -name "[[:digit:]]" -type f -exec cp '{}' lib/kernel/config/AA/BB/CC/XX ';'
+[aissyne@salle222-15 TREE] find . -maxdepth 4 -name "[[:digit:]]" -type f -exec cp '{}' lib/kernel/config/AA/BB/DD/ ';'
+[aissyne@salle222-15 TREE] find . -maxdepth 4 -name "[[:digit:]]" -type f -exec cp '{}' lib/kernel/config/AA/BB/DD/YY ';'
+
+2)
+[aissyne@salle222-15 TREE] find . -amin +30
+.
+./lib
+./lib/kernel
+./lib/kernel/install.d/90-loaderentry.install
+./lib/kernel/install.d/50-depmod.install
+./lib/kernel/install.d/50-mkinitcpio.install
+./lib/kernel/config
+./lib/kernel/config/AA
+./lib/kernel/config/AA/BB
+./lib/kernel/config/AA/BB/CC
+./lib/kernel/config/AA/BB/CC/XX
+./lib/kernel/config/AA/BB/DD
+./lib/krb5/plugins/kdb/db2.so
+./lib/krb5/plugins/kdb/kldap.so
+./lib/krb5/plugins/inout.dev
+./lib/krb5/plugins/play.in
+./lib/krb5/plugins/preauth/otp.so
+./lib/krb5/plugins/preauth/pkinit.so
+./lib/krb5/synch/atom.install
+./lib/krb5/synch/settings.sh
+./lib/auth/transm.d
+
+
+3)
+[aissyne@salle222-15 TREE] find . -mindepth 6 -name "[[:upper:]]*" -type d -exec chmod 700 '{}' ';'
+pas de résultat 
+
+4)
+[aissyne@salle222-15 TREE] find . -cmin +15
+.
+./lib
+./lib/kernel
+./lib/kernel/install.d
+./lib/kernel/install.d/90-loaderentry.install
+./lib/kernel/install.d/50-depmod.install
+./lib/kernel/install.d/50-mkinitcpio.install
+./lib/kernel/config
+./lib/kernel/config/AA
+./lib/kernel/config/AA/BB
+./lib/krb5
+./lib/krb5/plugins
+./lib/krb5/plugins/kdb
+./lib/krb5/plugins/kdb/db2.so
+./lib/krb5/plugins/kdb/kldap.so
+./lib/krb5/plugins/custom.install
+./lib/krb5/plugins/inout.dev
+./lib/krb5/plugins/play.in
+./lib/krb5/plugins/preauth
+./lib/krb5/plugins/preauth/otp.so
+./lib/krb5/plugins/preauth/pkinit.so
+./lib/krb5/synch
+./lib/krb5/synch/atom.install
+./lib/krb5/synch/settings.sh
+./lib/auth
+./lib/auth/transm.d
+
+
+Partie 3:
+
+[aissyne@salle222-15 TREE] cp -r . ../TRee
+on copie le dossier TREE pour le placer à côté de lui
+ 
+1)
+[aissyne@salle222-15 TREE] find / -name "*.h" -print -quit 2>/dev/null
+/usr/share/libtool/ltdl.h
+
+2)
+[aissyne@salle222-15 TREE] find ~ -newer ../TRee/lib/auth/transm.d -printf "%p -- %TF %TH %TM\n" 2>/dev/null

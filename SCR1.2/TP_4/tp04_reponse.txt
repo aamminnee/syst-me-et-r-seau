@@ -1,0 +1,52 @@
+Partie 1:
+
+1) la commande status sur localectl permet d'afficher le paramètre de la disposition courante
+[aissyne@salle222-15 TP4]$ localectl status
+System Locale: LANG=en_US.UTF-8
+    VC Keymap: fr-latin1
+   X11 Layout: (unset) 
+[aissyne@salle222-15 TP4]$ cat /etc/vconsole.conf 
+KEYMAP=fr-latin1
+oui c'est bien conforme
+la commande pour prendre tout les disposition disponible est localectl list-keymaps
+
+PARTIE 2:
+
+1)
+[aissyne@salle222-15 TP4]$ lsblk
+NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+nvme0n1     259:0    0 476.9G  0 disk 
+├─nvme0n1p1 259:1    0   100M  0 part 
+├─nvme0n1p2 259:2    0    16M  0 part 
+├─nvme0n1p3 259:3    0 243.4G  0 part 
+├─nvme0n1p4 259:4    0   670M  0 part 
+├─nvme0n1p5 259:5    0   224G  0 part /
+└─nvme0n1p6 259:6    0   8.8G  0 part [SWAP]
+le nom attribuer par le systemes d'exploitation au disque dur est "nvme0n1"
+le disque est partionner en 6 partitions
+[aissyne@salle222-15 TP4]$ lsblk -p
+NAME             MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+/dev/nvme0n1     259:0    0 476.9G  0 disk 
+├─/dev/nvme0n1p1 259:1    0   100M  0 part 
+├─/dev/nvme0n1p2 259:2    0    16M  0 part 
+├─/dev/nvme0n1p3 259:3    0 243.4G  0 part 
+├─/dev/nvme0n1p4 259:4    0   670M  0 part 
+├─/dev/nvme0n1p5 259:5    0   224G  0 part /
+└─/dev/nvme0n1p6 259:6    0   8.8G  0 part [SWAP]
+l'option est donc -p
+
+2)
+mount affiche le contenu de mtab d'une différentes manière que lorsqu'on affiche /etc/mtab lecteur de
+fichiers
+la commande findmnt execute mtab au demarrage et il affiche ausssi le fichier mtab d'une manière différente
+avec son arboressence
+l'option esr
+
+PARTIE 3:
+
+1)
+la commande sera ps aux | grep dhcpcd
+
+2)
+ip address help
+ip address add 192.168.1.100/16 dev eno1

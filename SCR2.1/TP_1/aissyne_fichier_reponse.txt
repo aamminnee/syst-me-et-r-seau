@@ -1,0 +1,298 @@
+COMPTE RENDU :
+
+Partie 1:
+
+1) 
+[aissyne@salle222-15 ~]$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute 
+       valid_lft forever preferred_lft forever
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 80:e8:2c:ef:88:59 brd ff:ff:ff:ff:ff:ff
+    altname enp0s31f6
+    inet 172.16.3.202/16 metric 1024 brd 172.16.255.255 scope global dynamic eno1
+       valid_lft 3517sec preferred_lft 3517sec
+    inet6 2a01:729:b9:1600:172:16:3:202/128 scope global dynamic noprefixroute 
+       valid_lft 3911sec preferred_lft 2911sec
+    inet6 fe80::82e8:2cff:feef:8859/64 scope link proto kernel_ll 
+       valid_lft forever preferred_lft forever
+3: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default 
+    link/ether 02:42:86:8f:50:40 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+
+on constate les 3 interfaces réseaux de la machine soit : lo, eno1, docker0
+
+2)
+[aissyne@salle222-15 ~]$ ip address show dev lo
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute 
+       valid_lft forever preferred_lft forever
+
+on constate que seul l'interface lo est affiché
+
+3)
+[aissyne@salle222-15 ~]$ ip link show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 80:e8:2c:ef:88:59 brd ff:ff:ff:ff:ff:ff
+    altname enp0s31f6
+3: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default 
+    link/ether 02:42:86:8f:50:40 brd ff:ff:ff:ff:ff:ff
+
+on peut constater que cela affiche l'adresse MAC (physique) de l'interface réseaux
+lo: mtu 65536 octets
+eno1: mtu 1500 octets 
+docker0: 1500 octets
+# mtu (Unit Transmission Maximum) : nombre d'octets qui traverse l'interface réseaux peut prendre en charge a la fois (entrée/sortie)
+
+4)
+[aissyne@salle222-15 ~]$ ip link show dev eno1
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 80:e8:2c:ef:88:59 brd ff:ff:ff:ff:ff:ff
+    altname enp0s31f6
+
+il se concentre bien sur l'interface principale
+
+5)
+le cache ARP est l'ensemble des correspondances de la forme (adrresse_ip, link_addr) que la machine connait
+dans son voisinage;
+[aissyne@salle222-15 ~]$ ip neighbour show
+
+# remarque show n'est pas obligatoire car sans commande, il affiche par défault
+lladdr: adresse couche liaison de données # premier L: linl | 2eme L: layer
+# remarque; on apelle voisin les gens qui ont le même préfixe que moi dans le réseaux
+
+6)
+[aissyne@salle222-15 ~]$ ip -r neighbour show
+l'option -r remplace donne les nom associé au voisin -r est aussi -resolve
+[aissyne@salle222-15 ~]$ ip -r neighbour show
+salle231-10.iut-fbleau.fr dev eno1 lladdr e4:54:e8:a1:d6:c9 STALE 
+ns3.iut-fbleau.fr dev eno1 lladdr bc:24:11:ee:64:1b STALE 
+salle229-06.iut-fbleau.fr dev eno1 FAILED 
+172.16.10.39 dev eno1 lladdr bc:24:11:e6:ee:8b STALE 
+salle223-04.iut-fbleau.fr dev eno1 lladdr 80:e8:2c:ef:89:ca STALE 
+salle235-09.iut-fbleau.fr dev eno1 lladdr e4:54:e8:a1:a2:9b STALE 
+salle229-02.iut-fbleau.fr dev eno1 lladdr e4:54:e8:a1:a6:0d STALE 
+salle231-13.iut-fbleau.fr dev eno1 lladdr e4:54:e8:a1:d8:6a STALE 
+salle304-13.iut-fbleau.fr dev eno1 lladdr 84:69:93:82:ea:9f STALE 
+salle222-04.iut-fbleau.fr dev eno1 lladdr 80:e8:2c:ef:87:c7 STALE 
+salle234-09.iut-fbleau.fr dev eno1 FAILED 
+salle235-01.iut-fbleau.fr dev eno1 lladdr e4:54:e8:a1:a5:40 STALE 
+172.16.1.125 dev eno1 lladdr bc:24:11:2e:18:83 STALE 
+salle225-14.iut-fbleau.fr dev eno1 lladdr 80:e8:2c:ef:87:11 STALE 
+salle223-07.iut-fbleau.fr dev eno1 lladdr 80:e8:2c:ef:59:c6 STALE 
+salle222-15.arda.lan dev eno1 lladdr bc:24:11:b9:46:17 STALE 
+salle234-12.iut-fbleau.fr dev eno1 lladdr e4:54:e8:a1:a5:9c STALE 
+eru.iut-fbleau.fr dev eno1 lladdr bc:24:11:ea:5d:e4 STALE 
+salle223-03.iut-fbleau.fr dev eno1 lladdr 80:e8:2c:ef:88:06 STALE 
+salle304-01.iut-fbleau.fr dev eno1 FAILED 
+172.16.1.17 dev eno1 FAILED 
+anor.iut-fbleau.fr dev eno1 lladdr bc:24:11:91:d0:59 STALE 
+salle235-08.iut-fbleau.fr dev eno1 lladdr e4:54:e8:a1:db:3d STALE 
+salle229-12.iut-fbleau.fr dev eno1 lladdr e4:54:e8:a1:a3:d9 STALE 
+salle221-04.iut-fbleau.fr dev eno1 lladdr 34:17:eb:98:96:cf STALE 
+172.16.1.13 dev eno1 FAILED 
+gatekeeper.iut-fbleau.fr dev eno1 lladdr c6:74:2d:e1:04:ba STALE 
+maiar.iut-fbleau.fr dev eno1 lladdr bc:24:11:1b:bd:58 STALE 
+...
+
+l'adressse MAC de gatekeeper est c6:74:2d:e1:04:ba
+
+
+7)
+[aissyne@salle222-15 ~]$ ip route show
+default via 172.16.1.254 dev eno1 proto dhcp src 172.16.3.202 metric 1024 
+172.16.0.0/16 dev eno1 proto kernel scope link src 172.16.3.202 metric 1024 
+172.16.1.2 dev eno1 proto dhcp scope link src 172.16.3.202 metric 1024 
+172.16.1.252 dev eno1 proto dhcp scope link src 172.16.3.202 metric 1024 
+172.16.1.253 dev eno1 proto dhcp scope link src 172.16.3.202 metric 1024 
+172.16.1.254 dev eno1 proto dhcp scope link src 172.16.3.202 metric 1024 
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown 
+
+l'adresse ip de la passerelle est 172.16.1.254 
+
+# remarque les 2 lignes importante sont:
+  - celle ou on voit son adresse ip, le nom de son interface réseau,
+  cette ligne renseigne sur son réseau d'attachement
+  - celle ou on voit "default via" qui indique une route par défault. ici, cela 
+  veut dire à quelle machine on confie un paquet qui porte une adresse ip 
+  destination qui n'est pas sur le réseau d'attachement 
+
+
+PARTIE 2: SUR arp
+
+1)
+[aissyne@salle222-15 ~]$ ip neigh get 172.16.1.254 dev eno1
+172.16.1.254 dev eno1 lladdr c6:74:2d:e1:04:ba REACHABLE 
+
+on remarque que 172.16.1.254 est sur le cahche ARP
+
+[aissyne@salle222-15 ~]$ ip neigh get 172.16.3.189 dev eno1
+Error: Neighbour entry not found.
+
+la 172.16.3.189 n'est pas sur le cache ARP
+
+[aissyne@salle222-15 ~]$ ping -c1 172.16.3.189 
+PING 172.16.3.189 (172.16.3.189) 56(84) bytes of data.
+64 bytes from 172.16.3.189: icmp_seq=1 ttl=64 time=1.16 ms
+
+--- 172.16.3.189 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 1.162/1.162/1.162/0.000 ms
+[aissyne@salle222-15 ~]$ ping -c 1 172.16.3.189 
+PING 172.16.3.189 (172.16.3.189) 56(84) bytes of data.
+64 bytes from 172.16.3.189: icmp_seq=1 ttl=64 time=0.558 ms
+
+--- 172.16.3.189 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.558/0.558/0.558/0.000 ms
+[aissyne@salle222-15 ~]$ ip neigh get 172.16.3.189 dev eno1
+172.16.3.189 dev eno1 lladdr 80:e8:2c:ef:87:2d REACHABLE 
+
+on a chargé l'adresse ip dans le cache ARP et on pu établir la connexion entre notre appareil et 172.16.3.189
+
+2) et 3) (-e = ethernet) et 4)
+on refait la même manipulation avec un voisin qui n'est pas dans le cache et en traçant en même temps le trafic partcpdump
+
+[aissyne@salle222-15 ~]$ tcpdump -i eno1 -nlte host 172.16.3.202 and host 172.16.3.201 | tee trace1.txt 
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on eno1, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+
+on ouvre un autre terminal et on ecrit:
+
+[aissyne@salle222-15 ~]$ ping -c 1 172.16.3.201
+PING 172.16.3.201 (172.16.3.201) 56(84) bytes of data.
+64 bytes from 172.16.3.201: icmp_seq=1 ttl=64 time=0.673 ms
+
+--- 172.16.3.201 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.673/0.673/0.673/0.000 ms
+
+et cela donne comme résultayt sur le terminal 1:
+
+80:e8:2c:ef:88:59 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 42: Request who-has 172.16.3.201 tell 172.16.3.202, length 28
+80:e8:2c:ef:87:1b > 80:e8:2c:ef:88:59, ethertype ARP (0x0806), length 60: Reply 172.16.3.201 is-at 80:e8:2c:ef:87:1b, length 46
+80:e8:2c:ef:88:59 > 80:e8:2c:ef:87:1b, ethertype IPv4 (0x0800), length 98: 172.16.3.202 > 172.16.3.201: ICMP echo request, id 3, seq 1, length 64
+80:e8:2c:ef:87:1b > 80:e8:2c:ef:88:59, ethertype IPv4 (0x0800), length 98: 172.16.3.201 > 172.16.3.202: ICMP echo reply, id 3, seq 1, length 64
+80:e8:2c:ef:87:1b > 80:e8:2c:ef:88:59, ethertype ARP (0x0806), length 60: Request who-has 172.16.3.202 tell 172.16.3.201, length 46
+80:e8:2c:ef:88:59 > 80:e8:2c:ef:87:1b, ethertype ARP (0x0806), length 42: Reply 172.16.3.202 is-at 80:e8:2c:ef:88:59, length 28
+
+on remarque les echange ARP et IPv4
+
+5) 6) -2
+fenetre a part pour tshark
+
+[aissyne@salle222-15 ~]$ tshark -i eno1 -lf "host 172.16.3.202 and host 172.16.3.201" | tee trace2.txt 
+Capturing on 'eno1'
+2     
+
+dans un autre terminal on ecrit ping 172.16.3.201 
+
+
+et le temrinal 1 renvoie : 
+
+1 0.000000000 172.16.3.202 → 172.16.3.201 ICMP 98 Echo (ping) request  id=0x0006, seq=1/256, ttl=64
+    2 0.000407187 172.16.3.201 → 172.16.3.202 ICMP 98 Echo (ping) reply    id=0x0006, seq=1/256, ttl=64 (request in 1)
+3     3 1.008012880 172.16.3.202 → 172.16.3.201 ICMP 98 Echo (ping) request  id=0x0006, seq=2/512, ttl=64
+4     4 1.008675607 172.16.3.201 → 172.16.3.202 ICMP 98 Echo (ping) reply    id=0x0006, seq=2/512, ttl=64 (request in 3)
+5     5 2.017975467 172.16.3.202 → 172.16.3.201 ICMP 98 Echo (ping) request  id=0x0006, seq=3/768, ttl=64
+6     6 2.018412925 172.16.3.201 → 172.16.3.202 ICMP 98 Echo (ping) reply    id=0x0006, seq=3/768, ttl=64 (request in 5)
+7     7 3.031366946 172.16.3.202 → 172.16.3.201 ICMP 98 Echo (ping) request  id=0x0006, seq=4/1024, ttl=64
+8     8 3.031831643 172.16.3.201 → 172.16.3.202 ICMP 98 Echo (ping) reply    id=0x0006, seq=4/1024, ttl=64 (request in 7)
+9     9 4.044952770 172.16.3.202 → 172.16.3.201 ICMP 98 Echo (ping) request  id=0x0006, seq=5/1280, ttl=64
+10    10 4.045383206 172.16.3.201 → 172.16.3.202 ICMP 98 Echo (ping) reply    id=0x0006, seq=5/1280, ttl=64 (request in 9)
+
+il fait la même chose que l'autre commande de la question suivante
+
+-Remarque : loption -l consiste a empecher d'attendre que e tampon se finissent.
+
+PARTIE 3:
+
+1)
+[aissyne@salle222-15 ~]$ tcpdump -i lo -lnetvvv | tee filtre1.log 
+tcpdump: listening on lo, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+
+autre terminal: 
+[aissyne@salle222-15 ~]$ ping -c 1 -s 9216 127.0.0.1
+PING 127.0.0.1 (127.0.0.1) 9216(9244) bytes of data.
+9224 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.026 ms
+
+--- 127.0.0.1 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.026/0.026/0.026/0.000 ms
+
+résultat du premier terminal:
+tcpdump: listening on lo, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+00:00:00:00:00:00 > 00:00:00:00:00:00, ethertype IPv4 (0x0800), length 9258: (tos 0x0, ttl 64, id 54843, offset 0, flags [DF], proto ICMP (1), length 9244)
+    127.0.0.1 > 127.0.0.1: ICMP echo request, id 3, seq 1, length 9224
+00:00:00:00:00:00 > 00:00:00:00:00:00, ethertype IPv4 (0x0800), length 9258: (tos 0x0, ttl 64, id 54844, offset 0, flags [none], proto ICMP (1), length 9244)
+    127.0.0.1 > 127.0.0.1: ICMP echo reply, id 3, seq 1, length 9224
+2 packets captured
+4 packets received by filter
+0 packets dropped by kernel
+
+[aissyne@salle222-15 ~]$ cat filtre1.log 
+00:00:00:00:00:00 > 00:00:00:00:00:00, ethertype IPv4 (0x0800), length 9258: (tos 0x0, ttl 64, id 54843, offset 0, flags [DF], proto ICMP (1), length 9244)
+    127.0.0.1 > 127.0.0.1: ICMP echo request, id 3, seq 1, length 9224
+00:00:00:00:00:00 > 00:00:00:00:00:00, ethertype IPv4 (0x0800), length 9258: (tos 0x0, ttl 64, id 54844, offset 0, flags [none], proto ICMP (1), length 9244)
+    127.0.0.1 > 127.0.0.1: ICMP echo reply, id 3, seq 1, length 9224
+
+
+
+2)
+[aissyne@salle222-15 ~]$ tcpdump -i eno1 -lnetvvv "host 172.16.3.202 and host 172.16.3.188 and icmp" | tee filtre2.log
+tcpdump: listening on eno1, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+
+
+autre terminal: 
+[aissyne@salle222-15 ~]$ ping -c 1 -s 9216 172.16.3.188
+PING 172.16.3.188 (172.16.3.188) 9216(9244) bytes of data.
+9224 bytes from 172.16.3.188: icmp_seq=1 ttl=64 time=0.867 ms
+
+--- 172.16.3.188 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.867/0.867/0.867/0.000 ms
+
+
+resultat terminal 1:
+80:e8:2c:ef:88:59 > 80:e8:2c:ef:87:59, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 45232, offset 0, flags [+], proto ICMP (1), length 1500)
+    172.16.3.202 > 172.16.3.188: ICMP echo request, id 4, seq 1, length 1480
+80:e8:2c:ef:88:59 > 80:e8:2c:ef:87:59, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 45232, offset 1480, flags [+], proto ICMP (1), length 1500)
+    172.16.3.202 > 172.16.3.188: ip-proto-1
+80:e8:2c:ef:88:59 > 80:e8:2c:ef:87:59, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 45232, offset 2960, flags [+], proto ICMP (1), length 1500)
+    172.16.3.202 > 172.16.3.188: ip-proto-1
+80:e8:2c:ef:88:59 > 80:e8:2c:ef:87:59, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 45232, offset 4440, flags [+], proto ICMP (1), length 1500)
+    172.16.3.202 > 172.16.3.188: ip-proto-1
+80:e8:2c:ef:88:59 > 80:e8:2c:ef:87:59, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 45232, offset 5920, flags [+], proto ICMP (1), length 1500)
+    172.16.3.202 > 172.16.3.188: ip-proto-1
+80:e8:2c:ef:88:59 > 80:e8:2c:ef:87:59, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 45232, offset 7400, flags [+], proto ICMP (1), length 1500)
+    172.16.3.202 > 172.16.3.188: ip-proto-1
+80:e8:2c:ef:88:59 > 80:e8:2c:ef:87:59, ethertype IPv4 (0x0800), length 378: (tos 0x0, ttl 64, id 45232, offset 8880, flags [none], proto ICMP (1), length 364)
+    172.16.3.202 > 172.16.3.188: ip-proto-1
+80:e8:2c:ef:87:59 > 80:e8:2c:ef:88:59, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 57807, offset 0, flags [+], proto ICMP (1), length 1500)
+    172.16.3.188 > 172.16.3.202: ICMP echo reply, id 4, seq 1, length 1480
+80:e8:2c:ef:87:59 > 80:e8:2c:ef:88:59, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 57807, offset 1480, flags [+], proto ICMP (1), length 1500)
+    172.16.3.188 > 172.16.3.202: ip-proto-1
+80:e8:2c:ef:87:59 > 80:e8:2c:ef:88:59, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 57807, offset 2960, flags [+], proto ICMP (1), length 1500)
+    172.16.3.188 > 172.16.3.202: ip-proto-1
+80:e8:2c:ef:87:59 > 80:e8:2c:ef:88:59, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 57807, offset 4440, flags [+], proto ICMP (1), length 1500)
+    172.16.3.188 > 172.16.3.202: ip-proto-1
+80:e8:2c:ef:87:59 > 80:e8:2c:ef:88:59, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 57807, offset 5920, flags [+], proto ICMP (1), length 1500)
+    172.16.3.188 > 172.16.3.202: ip-proto-1
+80:e8:2c:ef:87:59 > 80:e8:2c:ef:88:59, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 57807, offset 7400, flags [+], proto ICMP (1), length 1500)
+    172.16.3.188 > 172.16.3.202: ip-proto-1
+80:e8:2c:ef:87:59 > 80:e8:2c:ef:88:59, ethertype IPv4 (0x0800), length 378: (tos 0x0, ttl 64, id 57807, offset 8880, flags [none], proto ICMP (1), length 364)
+    172.16.3.188 > 172.16.3.202: ip-proto-1
+14 packets captured
+14 packets received by filter
+0 packets dropped by kernel
+
+remarque: il y a 7 paquest de requete et 7 paquets de réponse

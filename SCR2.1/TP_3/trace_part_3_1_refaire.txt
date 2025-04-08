@@ -1,0 +1,4 @@
+11:50:47.046614 IP (tos 0x0, ttl 64, id 54471, offset 0, flags [none], proto UDP (17), length 80)
+    salle223-06.arda.lan.53980 > ns3.iut-fbleau.fr.domain: 32498+ [1au] A? vintage.com. (52)
+11:50:47.065301 IP (tos 0x0, ttl 64, id 33337, offset 0, flags [none], proto UDP (17), length 112)
+    ns3.iut-fbleau.fr.domain > salle223-06.arda.lan.53980: 32498 1/0/1 vintage.com. A 86.105.245.69 (84)

@@ -1,0 +1,297 @@
+remarque: which <nom de la commande> permet de savoir siu la commande est fonctionnelle sur l'ordianteur
+
+COMPTE RENDU TP 14:
+
+PARTIE 1;
+
+1)
+terminal 1:
+[aissyne@salle222-15 ~]$ ncat -lu 50001
+
+terminal 2:
+[aissyne@salle222-15 ~]$ ss -na
+
+terminal 3:
+[aissyne@salle222-15 ~]$ ncat -u 172.16.3.188 50001
+
+la connexion est étanblie entre moi et mon voisin 
+
+chat:
+salut
+salut 
+aofnzeovbaeipfa
+je te vois 
+moi aussi je te vois
+je connais ton adresse je sais c'est quoi ta moyenne
+je vais te ddos 
+my bad 
+je te connais par coeur amije te connais par coeur amine aissyne
+
+pour envoyer le contenu d'un fichier.
+
+
+terminal 1:
+[aissyne@salle222-15 ~]$ ncat -lu 50001 > trace4.txt
+
+terminal 2:
+[aissyne@salle222-15 ~]$ ss -na
+
+terminal 3:
+[aissyne@salle222-15 ~]$ ncat -u 172.16.3.188 50001 < filtre2.log
+
+j'ai bien envoyé le filtre2.log de mon répértoire courant a mon voisin 
+
+[aissyne@salle222-15 ~]$ cat trace4.txt 
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void){
+  int int1;
+  int int2;
+  char a;
+  char b;
+  printf("Ecrivez deux entiers :\n");
+  a = scanf("%d", &int1);
+  b = scanf("%d", &int2);
+  for(int1<int2 ; int1==int2 ; int1= int1+1){
+      printf("%d\n", int1);
+  } for(int2<int1 ; int2==int1 ; int2= int2+1){
+      printf("%d\n", int2);
+  }
+}
+
+
+j'ai bien recu le contenu du fichier de mon voisin qur mon fichier trace4.txt
+
+2 et 3)
+[aissyne@salle222-15 ~]$ dd if=/dev/urandom of=ft-file.dat count=18
+18+0 records in
+18+0 records out
+9216 bytes (9.2 kB, 9.0 KiB) copied, 0.00155596 s, 5.9 MB/s
+
+on a generer le fichier.
+on va l'envoyer a notre voisin et on va observer combien le réseaux coupoe t-il les éléments.
+
+sur le termnal 1:
+[aissyne@salle222-15 ~]$ ncat -ul 50000
+
+sur le terminal 2:
+[aissyne@salle222-15 ~]$ ss -na --udp
+State  Recv-Q Send-Q                    Local Address:Port    Peer Address:Port 
+UNCONN 0      0                            127.0.0.54:53           0.0.0.0:*    
+UNCONN 0      0                         127.0.0.53%lo:53           0.0.0.0:*    
+UNCONN 0      0                     172.16.3.202%eno1:68           0.0.0.0:*    
+UNCONN 0      0                        172.18.255.255:137          0.0.0.0:*    
+UNCONN 0      0                            172.18.0.1:137          0.0.0.0:*    
+UNCONN 0      0                        172.17.255.255:137          0.0.0.0:*    
+UNCONN 0      0                            172.17.0.1:137          0.0.0.0:*    
+UNCONN 0      0                        172.16.255.255:137          0.0.0.0:*    
+UNCONN 0      0                          172.16.3.202:137          0.0.0.0:*    
+UNCONN 0      0                               0.0.0.0:137          0.0.0.0:*    
+UNCONN 0      0                        172.18.255.255:138          0.0.0.0:*    
+UNCONN 0      0                            172.18.0.1:138          0.0.0.0:*    
+UNCONN 0      0                        172.17.255.255:138          0.0.0.0:*    
+UNCONN 0      0                            172.17.0.1:138          0.0.0.0:*    
+UNCONN 0      0                        172.16.255.255:138          0.0.0.0:*    
+UNCONN 0      0                          172.16.3.202:138          0.0.0.0:*    
+UNCONN 0      0                               0.0.0.0:138          0.0.0.0:*    
+UNCONN 0      0                               0.0.0.0:50000        0.0.0.0:*    
+UNCONN 0      0                               0.0.0.0:5353         0.0.0.0:*    
+UNCONN 0      0                               0.0.0.0:5355         0.0.0.0:*    
+UNCONN 0      0      [fe80::82e8:2cff:feef:8859]%eno1:546             [::]:*    
+UNCONN 0      0                                  [::]:50000           [::]:*    
+UNCONN 0      0                                  [::]:5353            [::]:*    
+UNCONN 0      0                                  [::]:5355            [::]:*    
+[aissyne@salle222-15 ~]$ dd if=/dev/urandom of=ft-file.dat bs=1k count=9
+9+0 records in
+9+0 records out
+9216 bytes (9.2 kB, 9.0 KiB) copied, 0.0020573 s, 4.5 MB/s
+[aissyne@salle222-15 ~]$ ls -l ft-file.dat
+-rw-r--r-- 1 aissyne info-etu-but-2024 9216 Mar  4 14:10 ft-file.dat
+
+[aissyne@salle222-15 ~]$ tcpdump -i lo -ntl udp port 50000
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on lo, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+
+sur le terminal 3:
+[aissyne@salle222-15 ~]$ ncat -u 127.0.0.1 50000 < ft-file.dat
+
+
+sur le terminal 2:
+IP 127.0.0.1.50492 > 127.0.0.1.50000: UDP, length 8192
+IP 127.0.0.1.50492 > 127.0.0.1.50000: UDP, length 1024
+IP 127.0.0.1.50000 > 127.0.0.1.50492: UDP, length 1
+en 2 paquets sur le port 5000 
+
+on refait pour avoir plus de details avec le -v sur ntl
+
+sur le temrinal 2:
+[aissyne@salle222-15 ~]$ tcpdump -i lo -ntlv udp port 50000
+tcpdump: listening on lo, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+IP (tos 0x0, ttl 64, id 35944, offset 0, flags [DF], proto UDP (17), length 8220)
+    127.0.0.1.59866 > 127.0.0.1.50000: UDP, length 8192
+IP (tos 0x0, ttl 64, id 35945, offset 0, flags [DF], proto UDP (17), length 1052)
+    127.0.0.1.59866 > 127.0.0.1.50000: UDP, length 1024
+
+
+conclusion:
+les flags ip relative a la fragmentation n'indiquent pas une more fragment donc ce n'est pas une fragmentation. 
+on voit 2 paquets car le tampon ou la commande ncat stocke les octets lus depuis le fichier ft-file.dat a une taille de 8192 octets.
+
+4)
+
+cote serveur: 
+    sur le terminal 1:
+    [aissyne@salle222-15 ~]$ ncat -lu 50000
+
+    sur le terminal 2:
+    [[aissyne@salle222-15 ~]$ tcpdump -i eno1 -ntlv "udp and port 50000" 
+    tcpdump: listening on eno1, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+    IP (tos 0x0, ttl 64, id 7522, offset 0, flags [+], proto UDP (17), length 1500)
+        172.16.3.201.35634 > 172.16.3.202.50000: UDP, length 8192
+    IP (tos 0x0, ttl 64, id 7523, offset 0, flags [DF], proto UDP (17), length 1052)
+        172.16.3.201.35634 > 172.16.3.202.50000: UDP, length 1024
+
+cote client:
+    sur le terminal 1:
+    [aissyne@salle222-15 ~]$ tcpdump -i eno1 -nltv udp and dst host 172.16.3.202 and src host 172.3.16.201
+    tcpdump: listening on eno1, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+
+    sur le temrinal 2:
+    [aissyne@salle222-15 ~]$ ncat -u 172.16.3.202  50000 < ft-file.dat
+
+5)
+[aissyne@salle222-15 TP_2]$ tcpdump -i eno1 -ntlvF filtre.txt 
+tcpdump: listening on eno1, link-type EN10MB (Ethernet), snapshot length 262144 byte
+
+voir filtre dans filtre.txt
+
+
+
+PARTIE 2:
+
+1)
+[aissyne@salle222-15 ~]$ which traceroute
+which: no traceroute in (/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/opt/android-sdk/platform-tools:/opt/android-sdk/tools:/opt/android-sdk/tools/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl)
+[aissyne@salle222-15 ~]$ which tracepath
+/usr/bin/tracepat
+
+j'ai tracepath mais pas traceroute
+
+2)
+[aissyne@salle222-15 ~]$ tracepath www.iut-fbleau.fr
+ 1?: [LOCALHOST]                      pmtu 1500
+ 1:  www.iut-fbleau.fr                                     0.697ms reached
+ 1:  www.iut-fbleau.fr                                     0.279ms reached
+     Resume: pmtu 1500 hops 1 back 1 
+
+[aissyne@salle222-15 ~]$ tracepath www.google.fr
+ 1?: [LOCALHOST]                        0.003ms pmtu 1500
+ 1:  2a01:729:b9:1600:172:16:1:254                         0.515ms 
+ 1:  2a01:729:b9:1600:172:16:1:254                         0.516ms 
+ 2:  next1.iut-fbleau.fr                                   7.996ms 
+ 3:  2a01:72f:1000:fb::a                                   3.659ms 
+ 4:  no reply
+ 5:  2a01:728:0:514::b                                     3.786ms 
+ 6:  no reply
+....
+
+[aissyne@salle222-15 ~]$ tracepath www.iut-fbleau.fr -4
+ 1?: [LOCALHOST]                      pmtu 1500
+ 1:  www.iut-fbleau.fr                                     0.559ms reached
+ 1:  www.iut-fbleau.fr                                     0.621ms reached
+     Resume: pmtu 1500 hops 1 back 1 
+
+
+2)
+sur le terminal 1:
+[aissyne@salle222-15 ~]$ tcpdump -i eno1 -ntlv "host 172.16.3.202 and host not 172.16.1.30 and host not 172.16.1.31 and not arp"
+tcpdump: listening on eno1, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+IP (tos 0x0, ttl 1, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.59149 > 142.250.179.67.44444: UDP, length 1472
+IP (tos 0xc0, ttl 64, id 46797, offset 0, flags [none], proto ICMP (1), length 576)
+    172.16.1.254 > 172.16.3.202: ICMP time exceeded in-transit, length 556
+	IP (tos 0x0, ttl 1, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.59149 > 142.250.179.67.44444: UDP, length 1472
+IP (tos 0x0, ttl 1, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.59149 > 142.250.179.67.44445: UDP, length 1472
+IP (tos 0xc0, ttl 64, id 46798, offset 0, flags [none], proto ICMP (1), length 576)
+    172.16.1.254 > 172.16.3.202: ICMP time exceeded in-transit, length 556
+	IP (tos 0x0, ttl 1, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.59149 > 142.250.179.67.44445: UDP, length 1472
+IP (tos 0x0, ttl 2, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.59149 > 142.250.179.67.44446: UDP, length 1472
+IP (tos 0x0, ttl 254, id 0, offset 0, flags [none], proto ICMP (1), length 56)
+    37.58.131.238 > 172.16.3.202: ICMP time exceeded in-transit, length 36
+	IP (tos 0x0, ttl 1, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.59149 > 142.250.179.67.44446: UDP, length 1472
+IP (tos 0x0, ttl 3, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.59149 > 142.250.179.67.44447: UDP, length 1472
+IP (tos 0x0, ttl 253, id 47421, offset 0, flags [none], proto ICMP (1), length 96)
+    100.65.0.27 > 172.16.3.202: ICMP time exceeded in-transit, length 76
+	IP (tos 0x0, ttl 1, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.59149 > 142.250.179.67.44447: UDP, length 1472
+IP (tos 0x0, ttl 4, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.59149 > 142.250.179.67.44448: UDP, length 1472
+IP (tos 0x0, ttl 252, id 4964, offset 0, flags [none], proto ICMP (1), length 96)
+    100.121.1.230 > 172.16.3.202: ICMP time exceeded in-transit, length 76
+	IP (tos 0x0, ttl 1, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.59149 > 142.250.179.67.44448: UDP, length 1472
+IP (tos 0x0, ttl 5, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.59149 > 142.250.179.67.44449: UDP, length 1472
+IP (tos 0x0, ttl 1, id 56040, offset 0, flags [DF], proto TCP (6), length 64)
+    172.16.3.202.39252 > 172.16.1.254.5355: Flags [S], cksum 0x5e1b (incorrect -> 0x8532), seq 1450578281, win 64240, options [mss 1460,sackOK,TS val 346491943 ecr 0,nop,wscale 7,tfo  cookiereq,nop,nop], length 0
+IP (tos 0x0, ttl 64, id 0, offset 0, flags [DF], proto TCP (6), length 40)
+    172.16.1.254.5355 > 172.16.3.202.39252: Flags [R.], cksum 0x3bc8 (correct), seq 0, ack 1450578282, win 0, length 0
+IP (tos 0x0, ttl 5, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.59149 > 142.250.179.67.44450: UDP, length 1472
+IP (tos 0x0, ttl 5, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.59149 > 142.250.179.67.44451: UDP, length 1472
+IP (tos 0x0, ttl 6, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.59149 > 142.250.179.67.44452: UDP, length 1472
+^C
+16 packets captured
+16 packets received by filter
+0 packets dropped by kernel
+
+
+sur le termianl 2:
+[aissyne@salle222-15 TP_2]$ tracepath www.google.fr -4
+ 1?: [LOCALHOST]                      pmtu 1500
+ 1:  gatekeeper.iut-fbleau.fr                              0.372ms 
+ 1:  gatekeeper.iut-fbleau.fr                              0.311ms 
+ 2:  next1.iut-fbleau.fr                                   0.978ms 
+ 3:  100.65.0.27                                           3.133ms 
+ 4:  100.121.1.230                                         6.040ms 
+ 5:  no reply
+
+je me suis connecté a google et je voulais tracer la route que mes paquet ip recoivent
+a l'aide de la requete tcpdump ou a pu voir ce qui c'est 
+
+
+sur le termianl 1:
+[aissyne@salle222-15 ~]$ tcpdump -i eno1 -ntlv "host 172.16.3.202 and host not 172.16.1.30 and host not 172.16.1.31 and not arp"
+tcpdump: listening on eno1, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+IP (tos 0x0, ttl 1, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.42002 > 37.58.131.229.44444: UDP, length 1472
+IP (tos 0xc0, ttl 64, id 55949, offset 0, flags [none], proto ICMP (1), length 576)
+    37.58.131.229 > 172.16.3.202: ICMP 37.58.131.229 udp port 44444 unreachable, length 556
+	IP (tos 0x0, ttl 1, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.42002 > 37.58.131.229.44444: UDP, length 1472
+IP (tos 0x0, ttl 1, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.42002 > 37.58.131.229.44445: UDP, length 1472
+IP (tos 0xc0, ttl 64, id 55950, offset 0, flags [none], proto ICMP (1), length 576)
+    37.58.131.229 > 172.16.3.202: ICMP 37.58.131.229 udp port 44445 unreachable, length 556
+	IP (tos 0x0, ttl 1, id 0, offset 0, flags [DF], proto UDP (17), length 1500)
+    172.16.3.202.42002 > 37.58.131.229.44445: UDP, length 1472
+
+4 packets captured
+4 packets received by filter
+0 packets dropped by kernel
+
+sur le temrnial 2:
+[aissyne@salle222-15 TP_2]$ tracepath www.iut-fbleau.fr -4
+ 1?: [LOCALHOST]                      pmtu 1500
+ 1:  www.iut-fbleau.fr                                     0.479ms reached
+ 1:  www.iut-fbleau.fr                                     0.445ms reached
+     Resume: pmtu 1500 hops 1 back 1 

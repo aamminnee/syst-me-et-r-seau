@@ -1,0 +1,4 @@
+14:54:36.277536 IP (tos 0x0, ttl 64, id 24883, offset 0, flags [none], proto UDP (17), length 86)
+    salle222-15.arda.lan.45621 > ns3.iut-fbleau.fr.domain: 10890+ [1au] A? iluvatar.arda.lan. (58)
+14:54:36.278507 IP (tos 0x0, ttl 64, id 3909, offset 0, flags [none], proto UDP (17), length 118)
+    ns3.iut-fbleau.fr.domain > salle222-15.arda.lan.45621: 10890* 1/0/1 iluvatar.arda.lan. A 172.16.1.30 (90)

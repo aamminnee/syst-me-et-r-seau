@@ -1,0 +1,58 @@
+compte rendu noté:
+
+exercice 1:
+
+la commande pour afficher les caratéritique de son cpu est lscpu, et le nom du fichier est cpuinfo.
+
+exercice 2:
+
+la commande pour supprimer le fichier ff du dossier BB sans bouger de AA est tout simplement rm "chemin d'eccès pour aller jusqua ff".
+[aissyne@salle222-15 TP_note]$ mkdir AA BB
+[aissyne@salle222-15 TP_note]$ ls
+AA  BB	tp05_reponse.txt
+[aissyne@salle222-15 TP_note]$ cd BB
+[aissyne@salle222-15 BB]$ touch ff
+[aissyne@salle222-15 BB]$ cd ../AA
+[aissyne@salle222-15 AA]$ rm ../AA/ff
+[aissyne@salle222-15 AA]$ rm ../BB/ff
+[aissyne@salle222-15 AA]$ ls ../BB
+
+exercice 3:
+
+1)
+ le systeme de fichier va tout simplement executer la première partie de la commande soir mkdir CC, il n'y aura pas d'erreur
+car j'ai les accès nécéssaire et il n'existe pas de répertoire CC dans mon répertoire domicile et si il ne renvoie pas d'erreur
+alors il va executer la deuxieme partie de ma commande qui est cd CC il y aura pas d'erreur, en résumer il créer CC et se déplacer dans CC.
+
+2)
+le système de fichier va tout simplement executer la premier commande d ela commande soit mkdir CC mais ne va pas creer le fichier mais seulement renvoyer un message d'erreur et
+le code de sortie ne sera pas 0 donc il ne va pas executer cd CC
+[aissyne@salle222-15 TP_note]$ mkdir CC && cd CC
+mkdir: cannot create directory ‘CC’: File exists
+
+
+3)
+le systeme de fichier va tout simplement executer la première partie de la commande soir mkdir CC or il y aura un message d'erreur concernant les permission car il n'a aucune permission
+renvoie un code de sortie fifférent de 0 donc il ne va pas executer cd CC
+[aissyne@salle222-15 ~]$ mkdir test
+[aissyne@salle222-15 ~]$ chmod 100 test
+[aissyne@salle222-15 ~]$ cd test
+[aissyne@salle222-15 test]$ mkdir CC && cd CC
+mkdir: cannot create directory ‘CC’: Permission denied
+
+exercice 4:
+
+[aissyne@salle222-15 test]$ read -p "String 1: " var ; read -p "String 2: " var2 ; echo "The result is: $var $var2"
+String 1: il fait
+String 2: beau !
+The result is: il fait beau !
+
+on sait que read permet d'affecter une valeur a une variable la variable et que echo permet de l'afficher
+
+exercice 5:
+Taux de convervsion :
+10 슣 = 12 脬
+100 脬 = 108,5 $
+
+pour convertir ce texte je me suis rendu dans le site de l'enoncé et lorsque il le chiffre commence par 1 en binaire jn eprend en compte le caractere d'après
+

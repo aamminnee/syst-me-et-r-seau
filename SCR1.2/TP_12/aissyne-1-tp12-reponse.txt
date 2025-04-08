@@ -1,0 +1,22 @@
+COMPTE RENDU TP 12 :
+
+Partie 2:
+
+Partie 3:
+
+2) solution 1: grep -v "^#" sysctl.conf | solution 2: grep "^[^#]" sysctl.conf
+
+3) grep -r "_root_" ca-certificates.conf
+
+4) grep -r "_Class_[[:digit:]]" ca-certificates.conf
+
+5) grep -rl KEYMAP .
+
+6) grep -E \(.+\) Xorg.O.log
+
+7) grep -E --color '[.]?'([[:alnum:]]+[.])+([[:alnum:]]+)? kbr5.conf
+
+8) grep -E --color '[[:digit:]]([.][[:digit:]]+){3}' syslog
+
+9) grep -E --color '[[:digit:]]([.][[:digit:]]+)?' sensors.conf
+

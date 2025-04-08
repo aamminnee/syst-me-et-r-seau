@@ -1,0 +1,61 @@
+Compte rendu TP 7:
+
+PARTIE 1:
+
+exos 1:
+[aissyne@salle222-11 ~]$ expr length stock_market
+12
+compte le nombre de caractères d'une chaine de caratères
+
+[aissyne@salle222-11 ~]$ expr substr  stock_market 1 5
+stock
+affiche les caractères de 1 à 5
+
+[aissyne@salle222-11 ~]$ expr substr  stock_market 7 12
+market
+
+[aissyne@salle222-11 ~]$ expr index stock_market "_"
+6
+permet de donner l'indice du caractères séléctionner dans la chaine de caractères
+
+[aissyne@salle222-11 ~]$ expr index stock_market "_c"
+4
+permet de donner l'indice de la premiere occurence du caractère dans la chaine de caractères mais pour le premier élément qui trouve c est avant _ donc on donne l'indice du premier c
+
+question:
+
+1) 
+aissyne@salle222-11 ~]$ addr="10110010111000101000011101110010"
+[aissyne@salle222-11 ~]$ expr length $addr
+32
+
+2)
+[aissyne@salle222-11 ~]$ x=$(expr substr "$addr" 1 8) ; y=$(expr substr "$addr" 9 8) ; z=$(expr substr "$addr" 17 8) ; t=$(expr substr "$addr" 25 8)
+[aissyne@salle222-11 ~]$ echo -e "x = $x\ny = $y\nz = $z\nt = $t"
+x = 10110010
+y = 11100010
+z = 10000111
+t = 01110010
+
+3)
+[aissyne@salle222-11 ~]$ echo -e "$((2#$x))\n$((2#$y))\n$((2#$z))\n$((2#$t))"
+178
+226
+135
+114
+
+4)
+[aissyne@salle222-11 ~]$ addr_dot=$((2#$x))"."$((2#$y))"."$((2#$z))"."$((2#$t))
+[aissyne@salle222-11 ~]$ echo $addr_dot
+178.226.135.114
+
+PARTIE 2:
+
+1)
+[aissyne@salle222-11 TP_7]$ sort -n -k 5 ls-output.txt 
+trie par ordre croissant sur la taille du fichier
+aissyne@salle222-11 TP_7]$ sort -r -n -k 5 ls-output.txt
+trie par ordre décroissant sur la taille du fichier
+aissyne@salle222-11 TP_7]$ sort -n -k 5 ls-output.txt
+trie par ordre croissant sur la taille du fichier
+[aissyne@salle222-11 TP_7]$ tail -n +2 ls-output.txt | sort -n -k 5 ls-output.txt 

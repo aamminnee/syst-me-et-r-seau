@@ -1,0 +1,312 @@
+COMPTE RENDU TP 15:
+
+PARTIE 1:
+
+1)
+[aissyne@salle222-15 ~]$ cat /etc/resolv.conf
+# This is /run/systemd/resolve/stub-resolv.conf managed by man:systemd-resolved(8).
+# Do not edit.
+#
+# This file might be symlinked as /etc/resolv.conf. If you're looking at
+# /etc/resolv.conf and seeing this text, you have followed the symlink.
+#
+# This is a dynamic resolv.conf file for connecting local clients to the
+# internal DNS stub resolver of systemd-resolved. This file lists all
+# configured search domains.
+#
+# Run "resolvectl status" to see details about the uplink DNS servers
+# currently in use.
+#
+# Third party programs should typically not access this file directly, but only
+# through the symlink at /etc/resolv.conf. To manage man:resolv.conf(5) in a
+# different way, replace this symlink by a static file or a different symlink.
+#
+# See man:systemd-resolved.service(8) for details about the supported modes of
+# operation for /etc/resolv.conf.
+
+nameserver 127.0.0.53
+options edns0 trust-ad
+search 
+
+
+[aissyne@salle222-15 TP_2]$ nslookup 127.0.0.53
+53.0.0.127.in-addr.arpa	name = _localdnsstub.
+
+le nom est _localdnsstub
+
+nslooker permet de faire une requete dns sur l'adresse qu'on lui donne
+
+2)
+[aissyne@salle222-15 ~]$ dig -x 172.16.1.252
+
+; <<>> DiG 9.20.1 <<>> -x 172.16.1.252
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 25098
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 6465a48fb19ed9960100000067d96d5ebb964d3815701901 (good)
+;; QUESTION SECTION:
+;252.1.16.172.in-addr.arpa.	IN	PTR
+
+;; ANSWER SECTION:
+252.1.16.172.in-addr.arpa. 3600	IN	PTR	ns3.iut-fbleau.fr.
+
+;; Query time: 0 msec
+;; SERVER: 172.16.1.252#53(172.16.1.252) (UDP)
+;; WHEN: Tue Mar 18 13:55:58 CET 2025
+;; MSG SIZE  rcvd: 113
+
+[aissyne@salle222-15 ~]$ dig -x 172.16.1.253
+
+; <<>> DiG 9.20.1 <<>> -x 172.16.1.253
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 55109
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 2dba008de2464bc30100000067d96e3d0fc6e9362f9ffbb8 (good)
+;; QUESTION SECTION:
+;253.1.16.172.in-addr.arpa.	IN	PTR
+
+;; ANSWER SECTION:
+253.1.16.172.in-addr.arpa. 3600	IN	PTR	ns4.iut-fbleau.fr.
+
+;; Query time: 0 msec
+;; SERVER: 172.16.1.252#53(172.16.1.252) (UDP)
+;; WHEN: Tue Mar 18 13:59:41 CET 2025
+;; MSG SIZE  rcvd: 113
+
+
+la section ANSWER content la réponse de la résolution du nom
+celui qui nous a répondu est 172.16.1.252
+
+
+PARTIE 2:
+
+1)
+[goncalvl@salle222-14 ~]$ tshark -i eno1 -f "host 172.16.3.201 and port 53" 
+
+2)
+[goncalvl@salle222-14 ~]$ tshark -i eno1 -f "host 172.16.3.201 and port 53" | tee trace1-tshark.txt
+
+3)
+[goncalvl@salle222-14 ~]$ tshark -i eno1 -lf "host 172.16.3.201 and port 53" | tee trace1-tshark.txt
+
+4)
+[aissyne@salle222-15 ~]$ tshark -i eno1 -lV -f "host 172.16.3.202 and port 53" | tee trace_PART2_QUEST1.txt
+dans le terminal 1:
+[aissyne@salle222-15 ~]$ tshark -i eno1 -lO dns -f "host 172.16.3.202 and port 53" | tee trace_PART2_QUEST1.txt
+
+dans le terminal 2:
+[aissyne@salle222-15 ~]$ dig iluvatar.arda.lan
+
+; <<>> DiG 9.20.1 <<>> iluvatar.arda.lan
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 52856
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 9f70e3ae18a548d90100000067d9724aa7f76c3dcad785a6 (good)
+;; QUESTION SECTION:
+;iluvatar.arda.lan.		IN	A
+
+;; ANSWER SECTION:
+iluvatar.arda.lan.	3600	IN	A	172.16.1.30
+
+;; Query time: 0 msec
+;; SERVER: 172.16.1.252#53(172.16.1.252) (UDP)
+;; WHEN: Tue Mar 18 14:16:58 CET 2025
+;; MSG SIZE  rcvd: 90
+
+
+
+==> voir trace_PART2_QUEST1.txt 
+
+pour dig si je ne dis rien par féfault il va comprendre que je cherche une adresse. car dasn la reponse de dig ou encore dans la reponse de tshark
+-O details ce qu'on lui demande.
+-V details tout 
+
+
+on va dans la capture par tshark et on va regarder les lignes de la forme ..1.....: 
+explication de la frame2. ainsi, on on retrouve 
+qr: ceci est une réponse
+aa: authenritative answer: le serveur qui répond, précise que cette réponse vient de ses fichiers maitres
+rd: recursive desired : le serveur dit: on m'a demandé de résoudre récursivement si nécaissaire
+ra: recursioin avaible: la récursion est disponible chez moi
+le flags AA ceut signifier qu'il est autoritaire car il contientlla réponse dans ses fichier mères
+le flag RD veut signifier que l'option recursion desired est démandé par le client
+
+5)
+par la présence ou non de flag aa. ici, dnas cet exemple il est authoritaire sur le domaine arda.lan
+
+6)
+Time to live: 3600 (1 hour) <=== voir tshark
+le serveur a dit que l'enregistrement qui constitue la réponse a un TTL de 3600 ce qui correspont a une heure.
+
+7)
+dans le termoinal 1:
+[aissyne@salle222-15 TP_3]$ tcpdump -i eno1 -lv "host 172.16.3.202 and port 53 and domain" | tee trace_part2_tcpdump.txt 
+
+dans le terminal 2:
+[aissyne@salle222-15 ~]$ dig iluvatar.arda.lan
+
+; <<>> DiG 9.20.1 <<>> iluvatar.arda.lan
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 10890
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 84d0e3cf81aeb7cf0100000067d97b1ce5eff6989b9b976d (good)
+;; QUESTION SECTION:
+;iluvatar.arda.lan.		IN	A
+
+;; ANSWER SECTION:
+iluvatar.arda.lan.	3600	IN	A	172.16.1.30
+
+;; Query time: 0 msec
+;; SERVER: 172.16.1.252#53(172.16.1.252) (UDP)
+;; WHEN: Tue Mar 18 14:54:36 CET 2025
+;; MSG SIZE  rcvd: 90
+
+
+==> voir trace_part2_tcpdump.txt
+
+dans le paquet réponse affiché par tcpdump 
+*: que le flags aa état positionné dansla réponse 1/0/1
+1 awnser/ 0 autority / 1 additionnal
+
+8)
+dans le terminal 1:
+tcpdump -i eno1 -lv "host 172.16.3.202 and port 53 and domain" | tee trace_part2_tcpdump.txt 
+
+dans le terminal 2:
+[aissyne@salle223-06 ~]$ dig arda.com
+
+; <<>> DiG 9.20.1 <<>> arda.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 50453
+;; flags: qr rd ra; QUERY: 1, ANSWER: 4, AUTHORITY: 0, ADDITIONAL: 1
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: d8ea60c7c877934b0100000067e3d9d68ad9be41348d8214 (good)
+;; QUESTION SECTION:
+;arda.com.			IN	A
+
+;; ANSWER SECTION:
+arda.com.		60	IN	A	3.162.38.37
+arda.com.		60	IN	A	3.162.38.111
+arda.com.		60	IN	A	3.162.38.15
+arda.com.		60	IN	A	3.162.38.2
+
+;; Query time: 16 msec
+;; SERVER: 172.16.1.252#53(172.16.1.252) (UDP)
+;; WHEN: Wed Mar 26 11:41:26 CET 2025
+;; MSG SIZE  rcvd: 129
+
+je ne trouve pas de différence cependant ce ne veut pas forcément dire qu'il y en a pas.
+
+
+PARTIE 3:
+
+1)
+dans le terminal 1:
+tcpdump -i eno1 -lv "host 172.16.3.202 and port 53 and domain" | tee trace_part_3_1.txt 
+
+dans le termianl 2:
+[aissyne@salle223-06 ~]$ dig vintage.com
+
+; <<>> DiG 9.20.1 <<>> vintage.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 40169
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 6ab2eea7270d673e0100000067e3db2b8673b3364e920942 (good)
+;; QUESTION SECTION:
+;vintage.com.			IN	A
+
+;; ANSWER SECTION:
+vintage.com.		60	IN	A	86.105.245.69
+
+;; Query time: 26 msec
+;; SERVER: 172.16.1.252#53(172.16.1.252) (UDP)
+;; WHEN: Wed Mar 26 11:47:07 CET 2025
+;; MSG SIZE  rcvd: 84
+
+
+on refait la même chose:
+
+dans le terminal 1:
+tcpdump -i eno1 -lv "host 172.16.3.202 and port 53 and domain" | tee trace_part3_1_refaire.txt 
+
+dans le termianl 2:
+[aissyne@salle223-06 ~]$ dig vintage.com
+
+; <<>> DiG 9.20.1 <<>> vintage.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 32498
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: fc52a017cf9ed4da0100000067e3dc07c14975901f107222 (good)
+;; QUESTION SECTION:
+;vintage.com.			IN	A
+
+;; ANSWER SECTION:
+vintage.com.		60	IN	A	86.105.245.69
+
+;; Query time: 16 msec
+;; SERVER: 172.16.1.252#53(172.16.1.252) (UDP)
+;; WHEN: Wed Mar 26 11:50:47 CET 2025
+;; MSG SIZE  rcvd: 84
+
+
+normalement le ttl est différent car le ttl diminue, c'est a dire qu'il a une durée de vie limité dans le cache. or on observe un ttl de 60 seconde mais mes commandes
+je l'ai faite en 3 minutes et 40 secondes donc le ttl s'est remis a 0 et le dns a du refaire la commande
+mais sinon si on fait un dig vantage.com et on fait un dig vantage.com en moins de 60 secondes on pourra observer un ttl qui diminuent donc qui pert de la dure de vie dans le cache
+
+2)
+[aissyne@salle223-06 ~]$ dig illuvatar.arda.lan
+
+; <<>> DiG 9.20.1 <<>> illuvatar.arda.lan
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 36141
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 6d50553aeec0fb030100000067e3decc07dc0abc67738e2d (good)
+;; QUESTION SECTION:
+;illuvatar.arda.lan.		IN	A
+
+;; AUTHORITY SECTION:
+arda.lan.		3600	IN	SOA	ns3.iut-fbleau.fr. brouard.u-pec.fr. 1742219910 600 300 3600 3600
+
+;; Query time: 0 msec
+;; SERVER: 172.16.1.252#53(172.16.1.252) (UDP)
+;; WHEN: Wed Mar 26 12:02:36 CET 2025
+;; MSG SIZE  rcvd: 142
+
+on remarqque un TTL DE 3600 donc iluvatar.arda.lan reste dans le cache durant 3600 secondes contrairement au 60 secondes de vzntage.com
+
+
+3)
+
+Oui, il est possible de forcer une requête DNS à ne pas utiliser le cache et à récupérer une donnée fraîche directement depuis un serveur DNS autoritaire. 
+dig vintage.com +noall +answer +trace
+

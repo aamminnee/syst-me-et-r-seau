@@ -1,0 +1,1 @@
+read -p "Type an HEX UNICODE: " var ; echo -e "\U$var"

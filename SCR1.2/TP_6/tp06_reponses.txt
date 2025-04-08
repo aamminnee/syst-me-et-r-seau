@@ -1,0 +1,47 @@
+compte rendu TP6:
+
+PARTIE 1:
+
+1)
+[aissyne@salle222-15 TP_6]$ ls -d GLOB/gLob/*[[:upper:]]
+GLOB/gLob/44patterN  GLOB/gLob/patterN	GLOB/gLob/paTTerN  GLOB/gLob/pAtterN
+
+2)
+[aissyne@salle222-15 TP_6]$ ls -d GLOB/*[[:lower:]]*
+GLOB/11glob22blog3  GLOB/1glob22	 GLOB/gLob	 GLOB/pattern
+GLOB/1glob	    GLOB/1glob22gloB333  GLOB/gloB1bloG
+
+3)
+[aissyne@salle222-15 TP_6]$ ls -d GLOB/?[[:digit:]]* && ls -d GLOB/gLob/?[[:digit:]]*
+GLOB/11glob22blog3
+GLOB/gLob/44patterN
+
+4)
+[aissyne@salle222-15 TP_6]$ ls -d GLOB/*[[:digit:][:digit:]]*
+GLOB/11glob22blog3  GLOB/1glob22	 GLOB/gloB1bloG
+GLOB/1glob	    GLOB/1glob22gloB333
+
+PARTIE 2:
+
+1) fait
+
+2) shopt permet d'afficher les options du système de fichiers et avec l'option -s et -u on peut retirer une optiopn ou pas
+
+3) 
+  a) [aissyne@salle222-15 etc]$ cd 5*
+     bash: cd: 5*: No such file or directory
+  b) nullglob n'est pas positionné donc on l'active
+     
+     [aissyne@salle222-15 etc] shopt nullglob 
+     nullglob       	off
+     [aissyne@salle222-15 etc] shopt -s nullglob
+     [aissyne@salle222-15 etc] shopt nullglob
+     nullglob           on
+     [aissyne@salle222-15 etc] cd 5*
+     [aissyne@salle222-15 ~]
+  c)En résumé, l'option nullglob contrôle le comportement de bash en cas d'absence de correspondance pour un motif de fichier. Elle est utile pour éviter les erreurs lorsqu’on veut tester des motifs dans des scripts sans être certain qu’ils existent.
+
+
+
+
+

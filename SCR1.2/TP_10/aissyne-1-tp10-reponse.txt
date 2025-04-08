@@ -1,0 +1,51 @@
+COMPTE RENDU TP 10:
+
+instruction avant question:
+
+[aissyne@salle222-15 ~]$ ps
+    PID TTY          TIME CMD
+   1407 pts/0    00:00:00 bash
+   1995 pts/0    00:00:00 ps
+[aissyne@salle222-15 ~]$ man ps
+...
+ps permet de regarder les processus en cours
+PID repsresente l'id du processus
+TTY represente le terminal dans lequel le processus est éxécuté (environnement)
+TIME reprsente le temps d'éxécution du processusCMD représente le nom du processus
+
+[aissyne@salle222-15 ~]$ ps
+    PID TTY          TIME CMD
+  12223 pts/2    00:00:00 bash
+  12252 pts/2    00:00:00 ps
+
+l'environnement change on est dans le terminal 2 
+
+[aissyne@salle222-15 ~]$ ps -C bash
+    PID TTY          TIME CMD
+   1407 pts/0    00:00:00 bash
+   3117 pts/1    00:00:00 bash
+  12223 pts/2    00:00:00 bash
+
+en ce moment 3 bash sont en course de processus
+
+1) le programme: 
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    while (1) {
+        printf("ABC");
+        fflush(stdout);  
+        sleep(1);        
+    }
+    return 0;
+}
+gcc -o disp disp.c
+./disp A & ./disp B & ./disp C &
+
+2) CTRL + Z dans un terminal suspend processus en cours
+
+3) tapez CTRL + Z dans le même terminla ne change rien car les processus en cours sont suspendu.
+
+4)
+je le fais plus j'ai vraiment la flemme.
